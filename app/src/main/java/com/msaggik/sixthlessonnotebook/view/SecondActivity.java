@@ -24,7 +24,7 @@ public class SecondActivity extends AppCompatActivity {
 
     // создание полей
     private RecyclerView recyclerView; // поле для списка RecyclerView
-    private FloatingActionButton fabAdd; // поле для кнопки добавить новую заметку
+    private FloatingActionButton fabAdd, fabDeleteAll; // поле для кнопки добавить новую заметку
 
     private List<Notebook> notesList; // поле для контейнера списка заметок
 
@@ -40,6 +40,7 @@ public class SecondActivity extends AppCompatActivity {
         // присваивание id полям
         recyclerView = findViewById(R.id.recycler_list);
         fabAdd = findViewById(R.id.fabAdd);
+        fabDeleteAll = findViewById(R.id.fabDeleteAll);
 
         notesList = new ArrayList<>(); // выделение памяти и задание типа контейнера для списка заметок
         database = new DatabaseHelper(this); // выделение памяти и задание текущего контекста работы с БД
@@ -57,6 +58,15 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // переключение на новую активность
                 startActivity(new Intent(SecondActivity.this, AddNotesActivity.class));
+            }
+        });
+        fabDeleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                database.deleteAllNotes();
+                notesList.clear();
+                adapter.notifyDataSetChanged();
+                Toast.makeText(SecondActivity.this, "Все заметки удалены", Toast.LENGTH_SHORT).show();
             }
         });
     }
